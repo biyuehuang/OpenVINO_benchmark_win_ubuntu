@@ -5,6 +5,7 @@ step 1: install Miniconda
 Step 2: Open a terminal
 
 set http_proxy=http://proxy.com:913
+
 set https_proxy=http://proxy.com:913
 
 python -m pip install --upgrade pip
