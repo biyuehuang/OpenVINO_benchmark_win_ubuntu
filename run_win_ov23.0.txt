@@ -1,0 +1,45 @@
+echo off
+set time_delay=5
+move log.txt log.txt.old
+for /r %%f in (*.xml) do (
+
+
+echo ---------------------- >> log_ov23.0.txt
+echo run model: %%f on: GPU >> log_ov23.0.txt
+
+for %%b in (1,2,4,8,16,32,64,128) do (
+echo ---------------------- >> log.txt
+echo benchmark_app -d GPU -m %%f -shape [%%b,3,224,224] -hint throughput 
+echo benchmark_app -d GPU -m %%f -shape [%%b,3,224,224] -hint throughput >> log_ov23.0.txt
+
+benchmark_app -d GPU -m %%f -shape [%%b,3,224,224] -hint throughput >> log_ov23.0.txt
+%echo "%ERRORLEVEL%"
+%if not "%ERRORLEVEL%" == "0" goto _error
+echo Wait %time_delay% sec for system cool down
+timeout /t %time_delay%
+)
+
+echo ---------------------- >> log_ov23.0.txt
+echo run model: %%f on: CPU >> log_ov23.0.txt
+
+for %%b in (1,2,4,8,16,32,64,128) do (
+echo ---------------------- >> log.txt
+echo benchmark_app -d CPU -m %%f -shape [%%b,3,224,224] -hint throughput 
+echo benchmark_app -d CPU -m %%f -shape [%%b,3,224,224] -hint throughput >> log_ov23.0.txt
+
+benchmark_app -d CPU -m %%f -shape [%%b,3,224,224] -hint throughput >> log_ov23.0.txt
+%echo "%ERRORLEVEL%"
+%if not "%ERRORLEVEL%" == "0" goto _error
+echo Wait %time_delay% sec for system cool down
+timeout /t %time_delay%
+)
+
+
+)
+
+goto _exit
+:_error
+echo Got Error!!
+
+:_exit
+echo Run finished
