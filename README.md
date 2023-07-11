@@ -3,13 +3,13 @@ test all .xml file in current document
 
 step 1: install Miniconda
 Step 2: Open a terminal
-
+```
 set http_proxy=http://proxy.com:913
 
 set https_proxy=http://proxy.com:913
 
 python -m pip install --upgrade pip
-```
+
 $ conda create -n ov2023.0 python=3.8
 $ conda activate ov2023.0
 $ pip install openvino==2023.0.1
